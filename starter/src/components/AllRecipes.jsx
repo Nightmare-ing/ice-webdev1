@@ -20,12 +20,22 @@ const RECIPE_CHILI = JSON.parse(
 );
 
 export default function AllRecipes(props) {
+    const [recipe, setRecipe] = useState();
+    useEffect(() => {
+        fetch("https://cs571.org/rest/s25/ice/chili", {
+            headers: {
+                "X-CS571-ID": CS571.getBadgerId(),
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setRecipe(data);
+            });
+    }, []);
     return (
         <div>
             <h1>Welcome to Badger Recipes!</h1>
-            <Recipe {...RECIPE_PASTA} />
-            <Recipe {...RECIPE_PASTA} />
-            <Recipe {...RECIPE_CHILI} />
+            {recipe ? <Recipe {...recipe} /> : <p>Loading Data...</p>}
         </div>
     );
 }
